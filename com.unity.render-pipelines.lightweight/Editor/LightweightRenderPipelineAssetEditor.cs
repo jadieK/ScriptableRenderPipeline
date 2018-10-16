@@ -39,11 +39,15 @@ namespace UnityEngine.Experimental.Rendering.LightweightPipeline
             // Shadow settings
             public static GUIContent shadowDistanceText = EditorGUIUtility.TrTextContent("Distance", "Maximum shadow rendering distance.");
             public static GUIContent shadowCascadesText = EditorGUIUtility.TrTextContent("Cascades", "Number of cascade splits used in for directional shadows");
+            public static GUIContent shadowDepthBias = EditorGUIUtility.TrTextContent("Depth Bias", "Controls the distance at which the shadows will be pushed away from the light. Useful for avoiding false self-shadowing artifacts.");
+            public static GUIContent shadowNormalBias = EditorGUIUtility.TrTextContent("Normal Bias", "Controls distance at which the shadow casting surfaces will be shrunk along the surface normal. Useful for avoiding false self-shadowing artifacts.");
             public static GUIContent supportsSoftShadows = EditorGUIUtility.TrTextContent("Soft Shadows", "If enabled pipeline will perform shadow filtering. Otherwise all lights that cast shadows will fallback to perform a single shadow sample.");
 
             // Advanced settings
             public static GUIContent dynamicBatching = EditorGUIUtility.TrTextContent("Dynamic Batching", "If enabled the pipeline will batch drawcalls with few triangles together by copying their vertex buffers into a shared buffer on a per-frame basis.");
             public static GUIContent mixedLightingSupportLabel = EditorGUIUtility.TrTextContent("Mixed Lighting", "Support for mixed light mode.");
+
+            public static GUIContent shaderVariantLogLevel = EditorGUIUtility.TrTextContent("Shader Variant Log Level", "Controls the level logging in of shader variants information is outputted when a build is performed. Information will appear in the Unity console when the build finishes.");
 
             // Dropdown menu options
             public static string[] mainLightOptions = {"None", "Pixel Lighting"};
@@ -63,6 +67,7 @@ namespace UnityEngine.Experimental.Rendering.LightweightPipeline
         int k_MaxSupportedPerObjectLights = 4;
         float k_MinRenderScale = 0.1f;
         float k_MaxRenderScale = 4.0f;
+        float k_MaxShadowBias = 10.0f;
 
         SerializedProperty m_RequireDepthTextureProp;
         SerializedProperty m_RequireOpaqueTextureProp;
@@ -85,12 +90,15 @@ namespace UnityEngine.Experimental.Rendering.LightweightPipeline
         SerializedProperty m_ShadowCascadesProp;
         SerializedProperty m_ShadowCascade2SplitProp;
         SerializedProperty m_ShadowCascade4SplitProp;
-
+        SerializedProperty m_ShadowDepthBiasProp;
+        SerializedProperty m_ShadowNormalBiasProp;
         
         SerializedProperty m_SoftShadowsSupportedProp;
 
         SerializedProperty m_SupportsDynamicBatching;
         SerializedProperty m_MixedLightingSupportedProp;
+
+        SerializedProperty m_ShaderVariantLogLevel;
 
         SerializedProperty m_XRConfig;
 
@@ -131,10 +139,14 @@ namespace UnityEngine.Experimental.Rendering.LightweightPipeline
             m_ShadowCascadesProp = serializedObject.FindProperty("m_ShadowCascades");
             m_ShadowCascade2SplitProp = serializedObject.FindProperty("m_Cascade2Split");
             m_ShadowCascade4SplitProp = serializedObject.FindProperty("m_Cascade4Split");
+            m_ShadowDepthBiasProp = serializedObject.FindProperty("m_ShadowDepthBias");
+            m_ShadowNormalBiasProp = serializedObject.FindProperty("m_ShadowNormalBias");
             m_SoftShadowsSupportedProp = serializedObject.FindProperty("m_SoftShadowsSupported");
 
             m_SupportsDynamicBatching = serializedObject.FindProperty("m_SupportsDynamicBatching");
             m_MixedLightingSupportedProp = serializedObject.FindProperty("m_MixedLightingSupported");
+
+            m_ShaderVariantLogLevel = serializedObject.FindProperty("m_ShaderVariantLogLevel");
 
             m_XRConfig = serializedObject.FindProperty("m_SavedXRConfig");
         }
@@ -244,6 +256,8 @@ namespace UnityEngine.Experimental.Rendering.LightweightPipeline
                 else if (cascades == ShadowCascadesOption.TwoCascades)
                     CoreEditorUtils.DrawCascadeSplitGUI<float>(ref m_ShadowCascade2SplitProp);
 
+                m_ShadowDepthBiasProp.floatValue = EditorGUILayout.Slider(Styles.shadowDepthBias, m_ShadowDepthBiasProp.floatValue, 0.0f, k_MaxShadowBias);
+                m_ShadowNormalBiasProp.floatValue = EditorGUILayout.Slider(Styles.shadowNormalBias, m_ShadowNormalBiasProp.floatValue, 0.0f, k_MaxShadowBias);
                 EditorGUILayout.PropertyField(m_SoftShadowsSupportedProp, Styles.supportsSoftShadows);
                 EditorGUI.indentLevel--;
                 EditorGUILayout.Space();
@@ -259,6 +273,7 @@ namespace UnityEngine.Experimental.Rendering.LightweightPipeline
                 EditorGUI.indentLevel++;
                 EditorGUILayout.PropertyField(m_SupportsDynamicBatching, Styles.dynamicBatching);
                 EditorGUILayout.PropertyField(m_MixedLightingSupportedProp, Styles.mixedLightingSupportLabel);
+                EditorGUILayout.PropertyField(m_ShaderVariantLogLevel, Styles.shaderVariantLogLevel);
                 EditorGUI.indentLevel--;
                 EditorGUILayout.Space();
                 EditorGUILayout.Space();

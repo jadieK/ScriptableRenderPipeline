@@ -26,10 +26,10 @@ Shader "HDRenderPipeline/LayeredLit"
         _Metallic2("Metallic2", Range(0.0, 1.0)) = 0
         _Metallic3("Metallic3", Range(0.0, 1.0)) = 0
 
-        _Smoothness0("Smoothness0", Range(0.0, 1.0)) = 1.0
-        _Smoothness1("Smoothness1", Range(0.0, 1.0)) = 1.0
-        _Smoothness2("Smoothness2", Range(0.0, 1.0)) = 1.0
-        _Smoothness3("Smoothness3", Range(0.0, 1.0)) = 1.0
+        _Smoothness0("Smoothness0", Range(0.0, 1.0)) = 0.5
+        _Smoothness1("Smoothness1", Range(0.0, 1.0)) = 0.5
+        _Smoothness2("Smoothness2", Range(0.0, 1.0)) = 0.5
+        _Smoothness3("Smoothness3", Range(0.0, 1.0)) = 0.5
 
         _SmoothnessRemapMin0("SmoothnessRemapMin0", Range(0.0, 1.0)) = 0.0
         _SmoothnessRemapMin1("SmoothnessRemapMin1", Range(0.0, 1.0)) = 0.0
@@ -346,6 +346,7 @@ Shader "HDRenderPipeline/LayeredLit"
         _Cutoff("Alpha Cutoff", Range(0.0, 1.0)) = 0.5
 
         [ToggleUI] _SupportDecals("Support Decals", Float) = 1.0
+        [ToggleUI] _ReceivesSSR("Receives SSR", Float) = 1.0
     }
 
     HLSLINCLUDE
@@ -414,6 +415,7 @@ Shader "HDRenderPipeline/LayeredLit"
     #pragma shader_feature _ _LAYEREDLIT_3_LAYERS _LAYEREDLIT_4_LAYERS
 
     #pragma shader_feature _DISABLE_DECALS
+    #pragma shader_feature _DISABLE_SSR
     #pragma shader_feature _ENABLE_GEOMETRIC_SPECULAR_AA
 
     // Keyword for transparent

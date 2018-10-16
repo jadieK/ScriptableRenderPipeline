@@ -4,11 +4,23 @@ All notable changes to this package will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
-## [4.1.0-preview] - 2018-09-28
+## [5.0.0-preview] - 2018-09-28
 
 ### Added
 - Added occlusion mesh to depth prepass for VR (VR still disabled for now)
 - Added a debug mode to display only one shadow at once
+- Added controls for the highlight created by directional lights
+- Added a light radius setting to punctual lights to soften light attenuation and simulate fill lighting
+- Added a 'minRoughness' parameter to all non-area lights (was previously only available for certain light types)
+- Added separate volumetric light/shadow dimmers
+- Added per-pixel jitter to volumetrics to reduce aliasing artifacts
+- Added a SurfaceShading.hlsl file, which implements material-agnostic shading functionality in an efficient manner
+- Added support for shadow bias for thin object transmission
+- Added FrameSettings to control realtime planar reflection
+- Added control for SRPBatcher on HDRP Asset
+- Added an option to clear the shadow atlases in the debug menu
+- Added a color visualization of the shadow atlas rescale in debug mode
+- Added support for disabling SSR on materials
 
 ### Fixed
 - Fixed a normal bias issue with Stacklit (Was causing light leaking)
@@ -19,7 +31,15 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - Fixed wrong error message display when switching to unsupported target like IOS
 - Fixed an issue with ambient occlusion texture sometimes not being created properly causing broken rendering
 - Shadow near plane is no longer limited at 0.1
+- Fixed decal draw order on transparent material
 - Fixed an issue where sometime the lookup texture used for GGX convolution was broken, causing broken rendering
+- Fixed an issue where you wouldn't see any fog for certain pipeline/scene configurations
+- Fixed an issue with volumetric lighting where the anisotropy value of 0 would not result in perfectly isotropic lighting
+- Fixed shadow bias when the atlas is rescaled
+- Fixed shadow cascade sampling outside of the atlas when cascade count is inferior to 4
+- Fixed shadow filter width in deferred rendering not matching shader config
+- Fixed stereo sampling of depth texture in MSAA DepthValues.shader
+- Fix box light UI which allowed negative and zero sizes, thus causing NaNs
 
 ### Changed
 - Use samplerunity_ShadowMask instead of samplerunity_samplerLightmap for shadow mask
@@ -27,6 +47,9 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - Improve quality of screen space shadow
 - Remove support of projection model for ScreenSpaceLighting (SSR always use HiZ and refraction always Proxy)
 - Remove all the debug mode from SSR that are obsolete now
+- Expose frameSettings and Capture settings for reflection and planar probe
+- Update UI for reflection probe, planar probe, camera and HDRP Asset
+- Implement proper linear blending for volumetric lighting via deep compositing as described in the paper "Deep Compositing Using Lie Algebras"
 
 ## [4.0.0-preview] - 2018-09-28
 
@@ -79,7 +102,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - Avoid multiple depth buffer copies when decals are present
 - Refactor code related to the RT handle system (No more normal buffer manager)
 - Remove deferred directional shadow and move evaluation before lightloop
-- Add a function GetShadowNormalBias() that material need to implement to return the normal used for normal shadow biasing
+- Add a function GetNormalForShadowBias() that material need to implement to return the normal used for normal shadow biasing
 - Remove Jimenez Subsurface scattering code (This code was disabled by default, now remove to ease maintenance)
 - Change Decal API, decal contribution is now done in Material. Require update of material using decal
 - Move a lot of files from CoreRP to HDRP/CoreRP. All moved files weren't used by Ligthweight pipeline. Long term they could move back to CoreRP after CoreRP become out of preview

@@ -38,7 +38,6 @@ After the repo has been cloned you will need to run the following console comman
 
 ```
 > git checkout Unity-2018.1.0b2 (or the latest tag)
-> git submodule update --init (This command fetches the Postprocessing module, which is needed to use SRP)
 
 ```
 ### To download the repo using console commands:
@@ -49,7 +48,6 @@ Enter the following commands in your console application of choice:
 > git clone https://github.com/Unity-Technologies/ScriptableRenderPipeline
 > cd ScriptableRenderPipeline
 > git checkout Unity-2018.1.0b2 (or the latest tag)
-> git submodule update --init (This command fetches the Postprocessing module, which is needed to use SRP)
 
 ```
 ## Scriptable Render Pipeline Assets
@@ -89,6 +87,6 @@ Note: Always store your new Render Pipeline Asset outside of the Scriptable Rend
 
 If you want some sample scenes to use with SRP, you can find them at the [ScriptableRenderPipelineData GitHub repository](https://github.com/Unity-Technologies/ScriptableRenderPipelineData).
 
-Clone the repo into your project's Assets\ folder, likely alongside your ScriptableRenderPipeline clone folder.  You can use the same cloning process as described above for the main ScriptableRenderPipeline repo.
+Clone the repo into your project's Assets\ folder.
 
 Previous iterations of the ScriptableRenderPipeline repo owned this sample scene data, in case you noticed it before, and wondered where it went.
